@@ -14,7 +14,7 @@ let aspectRatio = window.innerWidth / window.innerHeight;
 
 const scene = new THREE.Scene();
 // const cssScene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(68, aspectRatio, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(68, aspectRatio, 0.1, 1200);
 const resizeUpdateInterval = 1000;
 
 const renderer = new THREE.WebGLRenderer({
@@ -22,6 +22,8 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true,
   alpha: true
 });
+
+
 
 
 // Make sure to always load from top of page
@@ -57,7 +59,7 @@ composer.addPass(renderPass);
 composer.addPass(bloomPass);
 
 const loader = new GLTFLoader();
-let pig, text, newPig;
+let pig, text, newPig, landscape;
 const pigGroup = new THREE.Group();
 
 // Load pigs and randomize instances
@@ -104,6 +106,29 @@ loader.load('./assets/NICKALLENTEXT2.glb', function (gltf) {
   console.error(err);
 })
 
+//landscape material;
+const landMat = new THREE.MeshBasicMaterial({ color: 0xda4447, wireframe: true });
+// Load landscape
+loader.load('./assets/eighties.glb', function (gltf) {
+  landscape = gltf.scene;
+  gltf.scene.traverse((obj) => {
+    if (obj.isMesh) {
+      console.log('material set');
+      obj.material = landMat;
+    } else {
+      console.log('material not set');
+      console.log(obj);
+    }
+  });
+  landscape.position.set(0,-35,-2500)
+  landscape.scale.set(15,10,12)
+
+  console.log('landscape postion', landscape)
+  scene.add(landscape);
+}, undefined, function (err) {
+  console.error(err);
+})
+
 // Config renderer and composer
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -115,9 +140,9 @@ renderer.render(scene, camera);
 
 // Torus
 const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const material = new THREE.MeshBasicMaterial({ color: 0xFF6347, wireframe: true });
+const material = new THREE.MeshBasicMaterial({ color: 0xa463aa, wireframe: true });
 const torus = new THREE.Mesh(geometry, material);
-torus.position.set(0,5,-5)
+torus.position.set(0,20,-40)
 scene.add(torus);
 
 
@@ -229,9 +254,17 @@ function movePig() {
 // // add it to the css scene
 // scene.add(cssObject);
 
+
 ///// FRAME BY FRAME ANIMATION
 function animate() {
   requestAnimationFrame(animate);
+
+  landscape.position.z += .2 ;
+  let reset = 384 * 2
+  if (landscape.position.z > -2500 + reset) {
+    landscape.position.z -= reset;
+  }
+  console.log(landscape.position.z);
 
   torus.rotation.x += .01;
   // loader.rotation.x += .2;

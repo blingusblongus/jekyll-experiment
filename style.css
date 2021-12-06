@@ -84,7 +84,7 @@ canvas {
 }
 
 .placeholder {
-  height: 500vh;
+  height: 600vh;
 }
 
 .perspective {
@@ -93,6 +93,16 @@ canvas {
 
 .star-war {
   transform: rotateY(45deg);
+}
+
+.pig-message {
+  color: pink;
+  bottom: 30%;
+}
+
+.final-message {
+  bottom: 30%;
+  font-size: 2em;
 }
 
 nav {

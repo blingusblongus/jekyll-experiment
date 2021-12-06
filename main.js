@@ -74,7 +74,7 @@ loader.load('./assets/Pig.glb', function (gltf) {
   for (let i = 0; i < 50; i++) {
     newPig = pig.clone(true);
     const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(50));
-    newPig.position.set(x / 2, y * 7 + 240, z);
+    newPig.position.set(x / 2, y * 9 + 340, z);
     newPig.rotation.set(x, y, z);
     pigGroup.add(newPig);
 

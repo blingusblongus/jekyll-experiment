@@ -23,31 +23,12 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true
 });
 
-
-
-
 // Make sure to always load from top of page
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
 }
 
-// const cssRenderer = new CSS3DRenderer({
-//   canvas: document.querySelector('#bg2'),
-//   antialias: true,
-//   alpha: true
-// });
-
-// cssRenderer.setSize(window.innerWidth, window.innerHeight);
-// document.body.appendChild(cssRenderer.domElement);
-// renderer.toneMapping = THREE.ReinhardToneMapping;
 renderer.toneMappingExposure = Math.pow(1.1, 4.0 );
-
-
-// let el = document.createElement('div');
-// el.innerHTML = '<h1>Hello There</h1>';
-// let cssObj = new CSS3DObject(el);
-// cssObj.position.set(0,0,-2);
-// cssScene.add(cssObj);
 
 const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), .9, .01, .3);
 
@@ -107,7 +88,7 @@ loader.load('./assets/NICKALLENTEXT2.glb', function (gltf) {
 })
 
 //landscape material;
-const landMat = new THREE.MeshBasicMaterial({ color: 0xda4447, wireframe: true });
+const landMat = new THREE.MeshBasicMaterial({ color: 0xaa3447, wireframe: true });
 // Load landscape
 loader.load('./assets/eighties.glb', function (gltf) {
   landscape = gltf.scene;
@@ -123,7 +104,6 @@ loader.load('./assets/eighties.glb', function (gltf) {
   landscape.position.set(0,-35,-2500)
   landscape.scale.set(15,10,12)
 
-  console.log('landscape postion', landscape)
   scene.add(landscape);
 }, undefined, function (err) {
   console.error(err);
@@ -183,10 +163,7 @@ window.addEventListener('scroll', (e) => {
   let distanceTop = firstDiv.getBoundingClientRect().top;
   let percentFromTop = 1 - (distanceTop / window.innerHeight);
   let infoPos = 0;
-  // console.log('percentFromTop', percentFromTop);
 
-  // document.getElementById('single-box').style.right = rightPx + '%';
-  // document.getElementById('horiz-scroll').style.right = right;
 
 
   let infos = document.getElementsByClassName('info-div');
@@ -197,19 +174,11 @@ window.addEventListener('scroll', (e) => {
     let toLeftRatio = toLeft/window.innerWidth - div.style.width;
     // let cos = (Math.abs(Math.cos(toLeftRatio * Math.PI)));
     let right = (infoPos + (t * -0.1) - 90 *(i+1)) + '%';
-    console.log('sin', (Math.abs(Math.cos(toLeftRatio * Math.PI))))
 
-    console.log('toLeft', toLeft/window.innerWidth + div.style.width / 2);
     div.style.right = right;
     div.style.transform = `rotateY(${-90 * (toLeftRatio) + 30}deg)`
-    console.log(div.style.transform);
 
   }
-
-
-  // document.getElementsByClassName('info-div')[0].style.transform = `rotateX(${(90 * (percentFromTop + .001))}deg)`;
-  // console.log('distanceTop', distanceTop);
-  // console.log('percent', percentTotal);
 })
 
 // NAME scroll handling
@@ -234,56 +203,23 @@ function movePig() {
   }
 }
 
-
-
-// // create the plane mesh
-// var planeMaterial = new THREE.MeshBasicMaterial({ wireframe: true });
-// var planeGeometry = new THREE.PlaneGeometry();
-// var planeMesh= new THREE.Mesh( planeGeometry, planeMaterial );
-// // add it to the WebGL scene
-// scene.add(planeMesh);
-
-// // create the dom Element
-// var element = document.createElement( 'img' );
-// element.src = 'textures/sprites/ball.png';
-// // create the object3d for this element
-// var cssObject = new THREE.CSS3DObject( element );
-// // we reference the same position and rotation 
-// cssObject.position = planeMesh.position;
-// cssObject.rotation = planeMesh.rotation;
-// // add it to the css scene
-// scene.add(cssObject);
-
-
 ///// FRAME BY FRAME ANIMATION
 function animate() {
   requestAnimationFrame(animate);
 
-  landscape.position.z += .2 ;
-  let reset = 384 * 2
-  if (landscape.position.z > -2500 + reset) {
-    landscape.position.z -= reset;
+  if(landscape){
+    landscape.position.z += .2 ;
+    let reset = 384 * 2
+    if (landscape.position.z > -2500 + reset) {
+      landscape.position.z -= reset;
+    }
   }
-  console.log(landscape.position.z);
 
   torus.rotation.x += .01;
   // loader.rotation.x += .2;
   if (pig) {
     pig.rotation.x += .05;
     pig.rotation.y += .02;
-    // pig.rotation.z += .02;
-
-  //   if (scaleUp) {
-  //     pig.scale.set(pig.scale.x + scaleSpeed, pig.scale.y + scaleSpeed, pig.scale.z + scaleSpeed);
-  //   } else {
-  //     pig.scale.set(pig.scale.x - scaleSpeed, pig.scale.y - scaleSpeed, pig.scale.z - scaleSpeed);
-  //   }
-
-  //   if (pig.scale.x > 5) {
-  //     scaleUp = false;
-  //   } if (pig.scale.x < .5) {
-  //     scaleUp = true;
-  //   }
   }
 
   composer.render();

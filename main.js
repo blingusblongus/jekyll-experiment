@@ -35,13 +35,13 @@ window.onbeforeunload = function () {
 
 renderer.toneMappingExposure = Math.pow(1.1, 4.0 );
 
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), .9, .01, .3);
-bloomPass.material
+// const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), .9, .01, .3);
+// bloomPass.material
 
-const composer = new EffectComposer(renderer);
-const renderPass = new RenderPass(scene, camera);
-// const cssPass = new RenderPass(cssScene, camera);
-composer.addPass(renderPass);
+// const composer = new EffectComposer(renderer);
+// const renderPass = new RenderPass(scene, camera);
+// // const cssPass = new RenderPass(cssScene, camera);
+// composer.addPass(renderPass);
 // composer.addPass(cssPass);
 // composer.addPass(bloomPass);
 
@@ -120,10 +120,10 @@ loader.load('./assets/NICKALLENTEXT2.glb', function (gltf) {
 // Config renderer and composer
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-composer.setPixelRatio = window.devicePixelRatio;
-composer.setSize(window.innerWidth, window.innerHeight);
+// composer.setPixelRatio = window.devicePixelRatio;
+// composer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
-renderer.render(scene, camera);
+// renderer.render(scene, camera);
 // cssRenderer.render(cssScene, camera);
 
 // Torus
@@ -163,7 +163,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
-  composer.setSize(window.innerWidth, window.innerHeight);
+  // composer.setSize(window.innerWidth, window.innerHeight);
 
 }
 
@@ -240,7 +240,7 @@ function animate() {
     pig.rotation.y += .02;
   }
 
-  composer.render();
+  renderer.render(scene, camera);
 }
 
 animate();

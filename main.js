@@ -13,8 +13,9 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 let aspectRatio = window.innerWidth / window.innerHeight;
 
 const scene = new THREE.Scene();
+scene.background = null;
 // const cssScene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(68, aspectRatio, 0.1, 1200);
+const camera = new THREE.PerspectiveCamera(68, aspectRatio, 0.1, 100);
 const resizeUpdateInterval = 1000;
 
 const renderer = new THREE.WebGLRenderer({
@@ -23,6 +24,10 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true
 });
 
+
+
+renderer.setClearColor( 0xffffff, .0);
+scene.background = null;
 // Make sure to always load from top of page
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);
@@ -31,13 +36,14 @@ window.onbeforeunload = function () {
 renderer.toneMappingExposure = Math.pow(1.1, 4.0 );
 
 const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), .9, .01, .3);
+bloomPass.material
 
 const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
 // const cssPass = new RenderPass(cssScene, camera);
 composer.addPass(renderPass);
 // composer.addPass(cssPass);
-composer.addPass(bloomPass);
+// composer.addPass(bloomPass);
 
 const loader = new GLTFLoader();
 let pig, text, newPig, landscape;
@@ -87,27 +93,29 @@ loader.load('./assets/NICKALLENTEXT2.glb', function (gltf) {
   console.error(err);
 })
 
-//landscape material;
-const landMat = new THREE.MeshBasicMaterial({ color: 0xaa3447, wireframe: true });
-// Load landscape
-loader.load('./assets/eighties.glb', function (gltf) {
-  landscape = gltf.scene;
-  gltf.scene.traverse((obj) => {
-    if (obj.isMesh) {
-      console.log('material set');
-      obj.material = landMat;
-    } else {
-      console.log('material not set');
-      console.log(obj);
-    }
-  });
-  landscape.position.set(0,-35,-2500)
-  landscape.scale.set(15,10,12)
 
-  scene.add(landscape);
-}, undefined, function (err) {
-  console.error(err);
-})
+
+//landscape material;
+// const landMat = new THREE.MeshBasicMaterial({ color: 0xaa3447, wireframe: true });
+// // Load landscape
+// loader.load('./assets/eighties.glb', function (gltf) {
+//   landscape = gltf.scene;
+//   gltf.scene.traverse((obj) => {
+//     if (obj.isMesh) {
+//       console.log('material set');
+//       obj.material = landMat;
+//     } else {
+//       console.log('material not set');
+//       console.log(obj);
+//     }
+//   });
+//   landscape.position.set(0,-35,-2500)
+//   landscape.scale.set(15,10,12)
+
+//   scene.add(landscape);
+// }, undefined, function (err) {
+//   console.error(err);
+// })
 
 // Config renderer and composer
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -119,16 +127,26 @@ renderer.render(scene, camera);
 // cssRenderer.render(cssScene, camera);
 
 // Torus
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const material = new THREE.MeshBasicMaterial({ color: 0xa463aa, wireframe: true });
-const torus = new THREE.Mesh(geometry, material);
-torus.position.set(0,20,-40)
-scene.add(torus);
+// const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+// const material = new THREE.MeshBasicMaterial({ color: 0xa463aa, wireframe: true});
+// const torus = new THREE.Mesh(geometry, material);
+// torus.position.set(0,20,-40)
+// scene.add(torus);
 
+
+// const video = document.getElementById( 'eighties-bg' );
+// const texture = new THREE.VideoTexture( video );
+// const videoGeom = new THREE.PlaneGeometry(20, 10, 1, 1);
+// const vidMat = new THREE.MeshBasicMaterial({map: texture}) 
+
+// const plane = new THREE.Mesh(videoGeom, vidMat);
+// plane.position.set(0, 0,-50);
+// plane.scale.set(10, 10, 10)
+// // scene.add(plane);
 
 /* LIGHTS */
 // POINT LIGHT
-const pointLight = new THREE.PointLight(0xffffff, 1);
+const pointLight = new THREE.PointLight(0xffffff, 3);
 pointLight.position.set(5, 5, 5);
 scene.add(pointLight);
 
@@ -215,7 +233,7 @@ function animate() {
     }
   }
 
-  torus.rotation.x += .01;
+  // torus.rotation.x += .01;
   // loader.rotation.x += .2;
   if (pig) {
     pig.rotation.x += .05;
